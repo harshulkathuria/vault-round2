@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PrintLink {
+  id                String      @id @default(uuid())
+  fileUrl           String      // Encrypted file location
+  encryptionKey     String      // Server-side encryption key fragment
+  isPrinted         Boolean     @default(false)
+  expiresAt         DateTime
+  createdAt         DateTime    @default(now())
+  printedAt         DateTime?
+  uploaderIp        String?     // Used for rate limiting
+  printerIp         String?
+  deviceFingerprint String?
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  linkId    String
+  action    String   // 'created', 'accessed', 'printed', 'deleted'
+  ip        String
+  userAgent String
+  timestamp DateTime @default(now())
+}
