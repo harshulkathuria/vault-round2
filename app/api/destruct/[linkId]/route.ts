@@ -3,9 +3,9 @@ import prisma from '@/lib/db';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
 
-export async function POST(request: Request, { params }: { params: { linkId: string } }) {
+export async function POST(request: Request, context: { params: Promise<{ linkId: string }> }) {
   try {
-    const linkId = params.linkId;
+    const { linkId } = await context.params;
     
     // 1. Transactionally lock the link as printed
     const printLink = await prisma.printLink.update({
@@ -33,12 +33,6 @@ export async function POST(request: Request, { params }: { params: { linkId: str
         console.log("Could not clear local file (might already be deleted):", e);
       }
     }
-
-    // 3. Increment User's print count
-    await prisma.user.update({
-      where: { id: printLink.userId },
-      data: { printCount: { increment: 1 }, lastPrintAt: new Date() }
-    });
 
     // 4. Log destruction
     await prisma.auditLog.create({

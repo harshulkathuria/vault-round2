@@ -3,9 +3,9 @@ import prisma from '@/lib/db';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
-export async function GET(request: Request, { params }: { params: { linkId: string } }) {
+export async function GET(request: Request, context: { params: Promise<{ linkId: string }> }) {
   try {
-    const linkId = params.linkId;
+    const { linkId } = await context.params;
     
     // 1. Validate Link
     const printLink = await prisma.printLink.findUnique({ where: { id: linkId } });
