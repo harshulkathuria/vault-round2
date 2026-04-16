@@ -159,11 +159,11 @@ export default function SecurePrintPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-container-lowest flex flex-col items-center justify-center w-full relative select-none font-inter overflow-hidden">
+    <div className="min-h-screen bg-surface-container-lowest flex flex-col items-center w-full relative select-none font-inter overflow-x-hidden py-24">
       
       {/* Structural Decoration */}
-      <div className="absolute top-0 inset-x-0 h-[2px] bg-primary-container/20 data-glow"></div>
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30"></div>
+      <div className="absolute top-0 inset-x-0 h-[2px] bg-primary-container/20 data-glow z-0"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30 pointer-events-none z-0"></div>
 
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
@@ -222,7 +222,7 @@ export default function SecurePrintPage() {
           </div>
 
           {/* Sovereign Action Bar */}
-          <div className="no-print mt-12 w-full max-w-2xl px-8 flex flex-col gap-10">
+          <div className="no-print mt-12 w-full max-w-2xl px-8 flex flex-col gap-10 relative z-50">
              <button 
                 onClick={triggerPrint}
                 className="w-full bg-primary-container hover:bg-white text-on-primary text-xl font-black py-8 rounded-2xl transition-all flex items-center justify-center gap-4 cyber-glow uppercase tracking-widest active:scale-95 group font-space-grotesk"
