@@ -78,7 +78,7 @@ export function combineKeys(clientPartRaw: Uint8Array, serverPartRaw: Uint8Array
 }
 
 export function bytesToBase64(bytes: Uint8Array): string {
-  if (typeof Buffer !== 'undefined') {
+  if (typeof Buffer !== 'undefined' && Buffer.from) {
     return Buffer.from(bytes).toString('base64');
   }
   let binary = '';
@@ -90,7 +90,7 @@ export function bytesToBase64(bytes: Uint8Array): string {
 }
 
 export function base64ToBytes(base64: string): Uint8Array {
-  if (typeof Buffer !== 'undefined') {
+  if (typeof Buffer !== 'undefined' && Buffer.from) {
     return new Uint8Array(Buffer.from(base64, 'base64'));
   }
   const binary_string = atob(base64);

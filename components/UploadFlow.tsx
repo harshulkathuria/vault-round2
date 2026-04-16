@@ -129,9 +129,21 @@ export default function UploadFlow() {
               )}
             </div>
 
-            {file && !uploadProgress && (
+            {status && status.startsWith('Error') && (
+              <div className="w-full mt-6 bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-sm font-medium shadow-[0_0_20px_rgba(239,68,68,0.1)]">
+                {status}
+              </div>
+            )}
+
+            {file && !uploadProgress && !status.startsWith('Error') && (
               <button onClick={handleUpload} className="w-full mt-8 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-black font-extrabold text-lg py-5 rounded-2xl transition-all shadow-[0_0_30px_rgba(52,211,153,0.4)] hover:shadow-[0_0_50px_rgba(52,211,153,0.6)] hover:-translate-y-1 flex items-center justify-center gap-2">
                 Encrypt & Generate Link <ArrowRight className="w-5 h-5" />
+              </button>
+            )}
+
+            {file && !uploadProgress && status.startsWith('Error') && (
+              <button onClick={handleUpload} className="w-full mt-8 bg-white/10 hover:bg-white/20 text-white font-bold text-lg py-5 rounded-2xl transition-all border border-white/20 flex items-center justify-center gap-2">
+                 Try Again
               </button>
             )}
 
