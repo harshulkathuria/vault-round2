@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from 'react';
-import { UploadCloud, File, ShieldCheck, AlertTriangle, ArrowRight, Lock } from 'lucide-react';
+import { Upload, FileText, ShieldCheck, AlertCircle, ArrowRight, Lock, Copy, Check, ShieldAlert } from 'lucide-react';
 import { encryptFile, splitKey, bytesToBase64 } from '@/lib/crypto';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -10,6 +10,7 @@ export default function UploadFlow() {
   const [status, setStatus] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [generatedUrl, setGeneratedUrl] = useState('');
+  const [isCopied, setIsCopied] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -19,10 +20,16 @@ export default function UploadFlow() {
     }
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(generatedUrl);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
   const handleUpload = async () => {
     if (!file) return;
     try {
-      setStatus('Encrypting locally (AES-256-GCM)...');
+      setStatus('Fragmenting Encryption Keys (AES-256-GCM)...');
       setUploadProgress(15);
       
       const { masterKeyRaw, serverPartRaw, clientPartRaw } = splitKey();
@@ -36,7 +43,7 @@ export default function UploadFlow() {
 
       const { encryptedBlob, iv } = await encryptFile(file, cryptoKey);
       setUploadProgress(45);
-      setStatus('Uploading secure payload...');
+      setStatus('Dispatching Secure Payload to Vault...');
 
       const formData = new FormData();
       formData.append('file', encryptedBlob);
@@ -51,7 +58,7 @@ export default function UploadFlow() {
       if(!uploadData.success) throw new Error(uploadData.error);
       
       setUploadProgress(75);
-      setStatus('Generating Secure Print Link...');
+      setStatus('Generating Sovereign Link ID...');
 
       const linkRes = await fetch('/api/link', {
         method: 'POST',
@@ -77,85 +84,89 @@ export default function UploadFlow() {
 
     } catch (e: any) {
       console.error(e);
-      setStatus(`Error: ${e.message}`);
+      setStatus(`System Error: ${e.message}`);
       setUploadProgress(0);
     }
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto glass-premium rounded-[2.5rem] relative overflow-hidden transition-all duration-500 hover:shadow-[0_0_80px_rgba(52,211,153,0.15)] group">
+    <div className="w-full max-w-xl mx-auto glass-sovereign rounded-3xl relative overflow-hidden transition-all duration-700 cyber-glow group">
       
-      {/* Glossy top highlight */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent"></div>
+      {/* Structural Accent Line */}
+      <div className="absolute top-0 inset-x-0 h-[2px] bg-primary-container data-glow opacity-50"></div>
 
-      <div className="p-10 sm:p-12 relative z-10 flex flex-col items-center">
+      <div className="p-10 lg:p-14 relative z-10">
         
         {step === 1 && (
-          <div className="w-full flex justify-center mb-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-transparent rounded-2xl flex items-center justify-center border border-emerald-500/30 shadow-[0_0_30px_rgba(52,211,153,0.2)]">
-              <Lock className="w-10 h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,1)]" />
+          <div className="space-y-10 animate-in fade-in zoom-in-95 duration-700">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-primary-container mb-2">
+                <ShieldCheck className="w-5 h-5 data-glow" />
+                <span className="text-label-sm font-black">Secure Ingest Protocol</span>
+              </div>
+              <h2 className="text-4xl font-black text-white uppercase tracking-tighter font-space-grotesk">Vault Upload</h2>
+              <p className="text-white/30 text-sm font-medium leading-relaxed">
+                Documents are cryptographically fragmented <span className="text-primary-container opacity-80">client-side</span> before server transmission.
+              </p>
             </div>
-          </div>
-        )}
 
-        {step === 1 && (
-          <div className="w-full text-center mb-8">
-            <h2 className="text-3xl font-extrabold mb-3 text-white tracking-tight">Vault Upload</h2>
-            <p className="text-white/50 text-sm font-medium">
-              Files are mathematically encrypted <span className="text-emerald-400/80">client-side</span> before leaving your device.
-            </p>
-          </div>
-        )}
-
-        {step === 1 && (
-          <div className="w-full animate-in fade-in zoom-in-95 duration-500">
             <div 
-              className={`border-2 border-dashed rounded-[2rem] p-12 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${file ? 'border-emerald-500 bg-emerald-500/10 shadow-[0_0_40px_rgba(52,211,153,0.15)__inset]' : 'border-white/10 hover:border-emerald-500/50 hover:bg-white/5 group-hover:border-white/20'}`}
+              className={`relative group/zone border border-outline-variant bg-surface-container-lowest/50 rounded-2xl p-16 flex flex-col items-center justify-center cursor-pointer transition-all duration-500 overflow-hidden ${file ? 'border-primary-container/40 bg-surface-container-high' : 'hover:border-primary-container/30 hover:bg-surface-container-low'}`}
               onClick={() => fileInputRef.current?.click()}
             >
+              {/* Bottom focus accent */}
+              <div className={`absolute bottom-0 inset-x-0 h-[2px] bg-primary-container transition-transform duration-500 origin-center ${file ? 'scale-x-100' : 'scale-x-0 group-hover/zone:scale-x-100'}`}></div>
+              
               <input type="file" className="hidden" ref={fileInputRef} onChange={handleFileChange} accept="application/pdf,image/png,image/jpeg" />
+              
               {file ? (
-                <>
-                  <File className="w-16 h-16 text-emerald-400 mb-4 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
-                  <p className="text-white font-bold text-lg text-center tracking-tight">{file.name}</p>
-                  <p className="text-emerald-400/70 font-mono text-sm mt-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                </>
+                <div className="flex flex-col items-center animate-in zoom-in-90 duration-300">
+                  <div className="w-20 h-20 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary-container mb-6 cyber-glow">
+                    <FileText className="w-10 h-10 data-glow" />
+                  </div>
+                  <p className="text-white font-black text-xl text-center tracking-tight mb-2 uppercase font-space-grotesk">{file.name}</p>
+                  <p className="text-primary-container/60 font-mono text-[10px] font-black uppercase tracking-widest bg-primary-container/5 px-4 py-2 rounded-full border border-primary-container/20">{(file.size / 1024 / 1024).toFixed(2)} MEGABYTES</p>
+                </div>
               ) : (
-                <>
-                  <UploadCloud className="w-16 h-16 text-white/30 mb-6 transition-transform duration-500 group-hover:-translate-y-2 group-hover:text-emerald-400/80" />
-                  <p className="text-white/90 font-semibold text-lg">Click to select file</p>
-                  <p className="text-white/40 text-sm mt-3 font-medium tracking-wide border border-white/5 bg-white/5 px-4 py-1.5 rounded-full">PDF, JPG, PNG</p>
-                </>
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-20 h-20 rounded-2xl bg-surface-container-high flex items-center justify-center text-white/10 mb-8 group-hover/zone:text-primary-container/40 transition-colors duration-500">
+                    <Upload className="w-10 h-10 transition-transform duration-700 group-hover/zone:-translate-y-2" />
+                  </div>
+                  <p className="text-white/80 font-bold text-lg uppercase tracking-tight font-space-grotesk">Initiate Data Transfer</p>
+                  <p className="text-white/20 text-xs mt-3 font-black tracking-[0.2em] uppercase">Allowed formats: PDF • PNG • JPG</p>
+                </div>
               )}
             </div>
 
-            {status && status.startsWith('Error') && (
-              <div className="w-full mt-6 bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-sm font-medium shadow-[0_0_20px_rgba(239,68,68,0.1)]">
+            {status && status.startsWith('System Error') && (
+              <div className="w-full mt-6 bg-error/10 border border-error/30 text-error p-5 rounded-xl text-sm font-bold flex gap-4 items-center animate-in slide-in-from-top-2">
+                <ShieldAlert className="w-5 h-5 shrink-0" />
                 {status}
               </div>
             )}
 
-            {file && !uploadProgress && !status.startsWith('Error') && (
-              <button onClick={handleUpload} className="w-full mt-8 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-black font-extrabold text-lg py-5 rounded-2xl transition-all shadow-[0_0_30px_rgba(52,211,153,0.4)] hover:shadow-[0_0_50px_rgba(52,211,153,0.6)] hover:-translate-y-1 flex items-center justify-center gap-2">
-                Encrypt & Generate Link <ArrowRight className="w-5 h-5" />
-              </button>
-            )}
-
-            {file && !uploadProgress && status.startsWith('Error') && (
-              <button onClick={handleUpload} className="w-full mt-8 bg-white/10 hover:bg-white/20 text-white font-bold text-lg py-5 rounded-2xl transition-all border border-white/20 flex items-center justify-center gap-2">
-                 Try Again
+            {!uploadProgress && (
+              <button 
+                onClick={file ? handleUpload : undefined} 
+                disabled={!file}
+                className={`w-full py-6 rounded-xl font-black text-lg uppercase tracking-widest transition-all duration-700 font-space-grotesk flex items-center justify-center gap-4 ${file ? 'bg-primary-container text-on-primary cyber-glow hover:scale-[1.02] active:scale-95 cursor-pointer' : 'bg-surface-container-high text-white/10 cursor-not-allowed border border-outline-variant'}`}
+              >
+                Encrypt & Vault <ArrowRight className="w-6 h-6" />
               </button>
             )}
 
             {uploadProgress > 0 && (
-              <div className="w-full mt-10">
-                <div className="flex justify-between items-end mb-3">
-                  <span className="text-emerald-400 font-medium text-sm tracking-wide animate-pulse">{status}</span>
-                  <span className="text-white font-mono font-bold text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">{uploadProgress}%</span>
+              <div className="w-full space-y-6 pt-4">
+                <div className="flex justify-between items-end">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-label-sm text-primary-container data-glow animate-pulse">{status}</span>
+                    <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest">Protocol status: Processing</span>
+                  </div>
+                  <span className="text-4xl font-black font-space-grotesk text-white tabular-nums">{uploadProgress}%</span>
                 </div>
-                <div className="w-full bg-black/50 border border-white/10 rounded-full h-3 p-0.5 overflow-hidden shadow-inner">
-                  <div className="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full rounded-full transition-all duration-500 ease-out shadow-[0_0_20px_rgba(52,211,153,0.8)] relative overflow-hidden" style={{width: `${uploadProgress}%`}}>
-                     <div className="absolute top-0 bottom-0 left-0 right-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] -translate-x-[100%] animate-[shimmer_1.5s_infinite]"></div>
+                <div className="w-full bg-surface-container-lowest border border-outline-variant rounded-full h-[6px] p-0 overflow-hidden shadow-inner">
+                  <div className="bg-primary-container h-full rounded-full transition-all duration-500 ease-out cyber-glow relative overflow-hidden" style={{width: `${uploadProgress}%`}}>
+                     <div className="absolute top-0 bottom-0 left-0 right-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] -translate-x-[100%] animate-burn"></div>
                   </div>
                 </div>
               </div>
@@ -164,36 +175,52 @@ export default function UploadFlow() {
         )}
 
         {step === 2 && (
-          <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <h2 className="text-3xl font-extrabold mb-8 text-white tracking-tight">Print Ready</h2>
-            
-            <div className="bg-white p-6 rounded-[2rem] mb-10 shadow-[0_0_60px_rgba(52,211,153,0.4)] border border-white border-opacity-20 transform hover:scale-105 transition-transform duration-500">
-              <QRCodeSVG value={generatedUrl} size={220} level="H" />
+          <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-12 duration-1000">
+            <div className="w-full space-y-3 mb-12">
+              <div className="flex items-center gap-3 text-secondary-container">
+                <ShieldCheck className="w-5 h-5" />
+                <span className="text-label-sm font-black">Encryption Verified</span>
+              </div>
+              <h2 className="text-4xl font-black text-white uppercase tracking-tighter font-space-grotesk">Protocol Ready</h2>
             </div>
             
-            <div className="w-full bg-black/60 border border-white/10 p-5 rounded-2xl flex items-center justify-between mb-8 shadow-inner backdrop-blur-md hover:border-emerald-500/30 transition-colors duration-500">
-              <p className="text-emerald-400 text-sm font-mono leading-tight pr-4 break-all truncate font-medium">{generatedUrl}</p>
+            <div className="relative group/qr">
+              <div className="absolute inset-0 bg-primary-container/10 blur-3xl rounded-full opacity-50 group-hover/qr:opacity-100 transition-opacity duration-700"></div>
+              <div className="bg-white p-8 rounded-3xl mb-12 shadow-2xl relative border-4 border-surface-container-high transform group-hover/qr:scale-105 transition-transform duration-500">
+                <QRCodeSVG value={generatedUrl} size={240} level="H" includeMargin={false} />
+              </div>
+            </div>
+            
+            <div className="w-full bg-surface-container-lowest border border-outline-variant p-6 rounded-2xl flex items-center justify-between mb-12 group/link transition-all duration-500 hover:border-primary-container/20">
+              <div className="flex flex-col gap-1 overflow-hidden">
+                <span className="text-label-sm opacity-30">Sovereign Link ID</span>
+                <p className="text-primary-container text-xs font-mono pr-4 truncate font-black lowercase tracking-wider">{generatedUrl}</p>
+              </div>
               <button 
-                onClick={() => navigator.clipboard.writeText(generatedUrl)}
-                 className="shrink-0 bg-white/10 hover:bg-emerald-500 hover:text-black font-semibold text-white px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg active:scale-95"
+                onClick={handleCopy}
+                 className={`shrink-0 flex items-center gap-2 font-black text-[10px] uppercase tracking-widest px-6 py-3 rounded-xl transition-all duration-500 ${isCopied ? 'bg-secondary-container text-black' : 'bg-surface-container-high text-white hover:bg-primary-container hover:text-on-primary active:scale-95'}`}
               >
-                Copy
+                {isCopied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy ID</>}
               </button>
             </div>
 
-            <div className="bg-amber-500/10 border border-amber-500/30 p-5 rounded-2xl flex gap-4 items-start text-amber-200/90 text-sm leading-relaxed shadow-[0_0_30px_rgba(245,158,11,0.1)]">
-              <AlertTriangle className="shrink-0 w-6 h-6 text-amber-400 mt-0.5 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]"/>
-              <div>
-                <strong className="block text-amber-400 mb-1 font-bold">CRITICAL SECURITY WARNING</strong>
-                This link contains the 256-bit decryption key. It cannot be recovered. It will expire in 4 hours and will permanently self-destruct upon printing.
+            <div className="bg-error/5 border border-error/20 p-6 rounded-2xl flex gap-6 items-start shadow-inner">
+              <div className="shrink-0 w-12 h-12 bg-error/10 rounded-xl flex items-center justify-center text-error border border-error/20">
+                <AlertCircle className="w-6 h-6 data-glow"/>
+              </div>
+              <div className="space-y-2">
+                <strong className="block text-error text-xs font-black uppercase tracking-widest font-space-grotesk">Critical Destruction Advisory</strong>
+                <p className="text-white/40 text-xs font-medium leading-relaxed">
+                  The 256-bit encryption fragment resides only in this ID. Zero recovery available. Link expires in 4 hours or upon single-use printing.
+                </p>
               </div>
             </div>
             
             <button 
               onClick={() => { setFile(null); setStep(1); setUploadProgress(0); }} 
-              className="mt-8 text-white/40 hover:text-white font-medium transition-colors duration-300 border-b border-transparent hover:border-white/30 pb-1"
+              className="mt-12 text-label-sm hover:text-white transition-colors duration-300 border-b border-outline-variant hover:border-white/40 pb-1 font-black"
             >
-              Encrypt another document
+              Initiate New Protocol
             </button>
           </div>
         )}

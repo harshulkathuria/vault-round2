@@ -1,59 +1,92 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-space-grotesk: var(--font-space-grotesk);
+  --font-inter: var(--font-inter);
+
+  --color-surface: #10141a;
+  --color-surface-container-lowest: #0a0e14;
+  --color-surface-container-low: #181c22;
+  --color-surface-container-high: #262a31;
+  --color-surface-variant: #31353c;
+  
+  --color-primary: #dbfcff;
+  --color-primary-container: #00f0ff;
+  --color-on-primary: #00363a;
+  
+  --color-secondary: #f5fff3;
+  --color-secondary-container: #27ff97;
+  
+  --color-error: #ffb4ab;
+  --color-outline-variant: rgba(132, 148, 149, 0.15);
+}
 
 @layer base {
   :root {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-    --border: 240 10% 12%;
+    --background: #10141a;
+    --foreground: #dfe2eb;
   }
-}
-
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
+  
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-feature-settings: "rlig" 1, "calt" 1;
-    overflow-x: hidden;
+    background-color: var(--color-surface);
+    color: var(--foreground);
+    @apply font-inter selection:bg-primary/30 antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-space-grotesk tracking-tight;
   }
 }
 
-/* Premium Glassmorphism */
-.glass-premium {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+@layer utilities {
+  .glass-sovereign {
+    background: rgba(49, 53, 60, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--color-outline-variant);
+  }
+
+  .cyber-glow {
+    box-shadow: 0 0 40px -10px rgba(0, 240, 255, 0.1),
+                0 0 60px -15px rgba(0, 240, 255, 0.05);
+  }
+
+  .data-glow {
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+  }
+
+  .no-line-card {
+    @apply bg-surface-container-low rounded-3xl transition-colors duration-300;
+  }
+
+  .no-line-card:hover {
+    @apply bg-surface-container-high;
+  }
+
+  .text-display-lg {
+    @apply text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter;
+  }
+
+  .text-label-sm {
+    @apply text-[10px] uppercase tracking-[0.2em] font-bold opacity-50;
+  }
 }
 
-.glow-text {
-  text-shadow: 0 0 50px rgba(52, 211, 153, 0.6);
+@keyframes burn {
+  from { width: 100%; }
+  to { width: 0%; }
 }
 
-.ambient-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(140px);
-  opacity: 0.15;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+.animate-burn {
+  animation: burn linear forwards;
 }
 
 @media print {
-  body {
-    background: white;
-    color: black;
-  }
   .no-print {
     display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
   }
 }

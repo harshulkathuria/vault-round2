@@ -137,9 +137,9 @@ export async function applyPdfSecurity(pdfBuffer: ArrayBuffer, linkId: string): 
         contentAccessibility: true, // Keep accessible but locked
         documentAssembly: false,
       },
-    });
+    } as any);
 
-    return new Blob([securedPdfBytes], { type: 'application/pdf' });
+    return new Blob([securedPdfBytes as any], { type: 'application/pdf' });
   } catch (e) {
     console.error("PDF Security failed, falling back to raw blob", e);
     return new Blob([pdfBuffer], { type: 'application/pdf' });

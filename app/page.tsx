@@ -1,66 +1,97 @@
 import UploadFlow from "@/components/UploadFlow";
+import { Shield, Cpu, Lock } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#050505] overflow-hidden relative selection:bg-emerald-500/30 font-sans">
-      {/* Dynamic Ambient Background Orbs */}
-      <div className="ambient-glow bg-emerald-500/40 w-[800px] h-[800px] -top-96 -left-96 mix-blend-screen"></div>
-      <div className="ambient-glow bg-cyan-500/30 w-[600px] h-[600px] top-1/4 -right-[300px] mix-blend-screen"></div>
-      <div className="ambient-glow bg-blue-500/20 w-[900px] h-[900px] -bottom-[400px] left-1/2 -translate-x-1/2 mix-blend-screen"></div>
+    <main className="min-h-screen bg-surface overflow-hidden relative selection:bg-primary/30 font-inter">
+      {/* Cinematic Technical Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-surface-container-low opacity-20 -skew-x-[15deg] translate-x-1/2"></div>
+        <div className="absolute top-[20%] left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] mix-blend-screen"></div>
+        <div className="absolute bottom-0 right-[10%] w-[600px] h-[600px] bg-secondary-container/5 rounded-full blur-[120px] mix-blend-screen"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:48px_48px] opacity-20"></div>
+      </div>
       
-      {/* Grid Pattern overlay for tech aesthetic */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none opacity-30"></div>
-      
-      <div className="relative z-10 container mx-auto px-6 py-8 flex flex-col min-h-screen">
+      <div className="relative z-10 container mx-auto px-8 lg:px-24 py-12 flex flex-col min-h-screen">
         
-        {/* Sleek Premium Navbar */}
-        <nav className="flex items-center justify-between py-6 no-print border-b border-white/5 mb-12">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(52,211,153,0.3)]">
-              <span className="font-black text-black text-lg tracking-tighter">VP</span>
+        {/* Technical Navbar */}
+        <nav className="flex items-center justify-between py-8 no-print mb-32 border-b border-outline-variant">
+          <div className="flex items-center gap-6">
+            <div className="w-10 h-10 bg-primary-container rounded-sm flex items-center justify-center">
+              <span className="font-space-grotesk font-black text-on-primary text-sm tracking-tighter">VP</span>
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-white/90">Vault Print</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-black tracking-tighter text-white uppercase font-space-grotesk">Vault Print</span>
+              <span className="text-label-sm leading-none">V2.4 Secure Protocol</span>
+            </div>
           </div>
-          <div className="flex gap-4 items-center">
-            <span className="text-xs uppercase tracking-widest text-emerald-400 font-bold border border-emerald-500/30 px-4 py-2 rounded-full bg-emerald-500/10 shadow-[0_0_15px_rgba(52,211,153,0.1)]">End-to-End Encrypted</span>
+          <div className="hidden md:flex gap-8 items-center">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></div>
+              <span className="text-label-sm opacity-80">Network Active</span>
+            </div>
+            <div className="h-4 w-px bg-outline-variant"></div>
+            <span className="text-label-sm border border-outline-variant px-5 py-2 rounded-full data-glow">End-to-End Encrypted</span>
           </div>
         </nav>
 
-        <div className="flex-1 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-16 p-4">
+        <div className="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-24 items-start pb-24">
           
-          {/* Left Hero Section */}
-          <div className="w-full lg:w-[55%] text-left space-y-10 no-print">
-            <h1 className="text-5xl lg:text-[5.5rem] font-extrabold tracking-tight text-white leading-[1.05]">
-              Secure.<br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 glow-text drop-shadow-lg">Zero-Knowledge.</span><br/>
-              Printing.
-            </h1>
-            <p className="text-xl text-white/50 max-w-lg leading-relaxed font-light">
-              Print your PAN or Aadhaar card at any public cyber cafe without leaving a digital footprint. Client-side encrypted payloads ensure your privacy is cryptographically guaranteed.
-            </p>
-            <ul className="space-y-5">
-               {['AES-256-GCM Browser Encryption', 'Anti-Screenshot Decryption Zone', 'Automated Post-Print Self-Destruct'].map((feature, idx) => (
-                 <li key={idx} className="flex items-center gap-4 text-white/80">
-                   <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(52,211,153,0.2)]">
-                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></div>
+          {/* Left Hero Section (Intentional Asymmetry) */}
+          <div className="lg:col-span-7 space-y-16 no-print order-2 lg:order-1 pt-8">
+            <div className="space-y-6">
+              <h1 className="text-display-lg">
+                Secure.<br/>
+                <span className="text-primary-container data-glow">Zero-Knowledge.</span><br/>
+                Printing.
+              </h1>
+              <p className="text-xl text-white/40 max-w-xl leading-relaxed font-medium">
+                Military-grade client-side encryption for your sensitive documents. Print PAN, Aadhaar, or private IDs at any public terminal without leaving a single byte behind.
+              </p>
+            </div>
+
+            <div className="lg:grid lg:grid-cols-2 gap-12 space-y-8 lg:space-y-0">
+               {[
+                 { icon: <Shield className="w-5 h-5" />, title: "256-Bit Cryptography", desc: "AES-GCM encryption fragments generated in-browser." },
+                 { icon: <Lock className="w-5 h-5" />, title: "Silent Destruct", desc: "Payloads permanently burned immediately after printing." },
+                 { icon: <Cpu className="w-5 h-5" />, title: "Local Processing", desc: "No unencrypted data ever touches our sovereign servers." }
+               ].map((feature, idx) => (
+                 <div key={idx} className="space-y-4 group">
+                   <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary-container group-hover:cyber-glow transition-all duration-500">
+                     {feature.icon}
                    </div>
-                   <span className="font-semibold text-base tracking-wide">{feature}</span>
-                 </li>
+                   <div className="space-y-2">
+                     <h3 className="text-lg font-bold text-white/90">{feature.title}</h3>
+                     <p className="text-sm text-white/30 leading-relaxed font-medium">{feature.desc}</p>
+                   </div>
+                 </div>
                ))}
-            </ul>
+            </div>
           </div>
 
           {/* Right Upload Flow Section */}
-          <div className="w-full lg:w-[45%] flex justify-center lg:justify-end no-print relative group">
-            {/* Ambient hover glow for the card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-            <UploadFlow />
+          <div className="lg:col-span-5 w-full flex justify-center lg:justify-end no-print order-1 lg:order-2">
+            <div className="w-full relative">
+              {/* Technical Decorative Frame */}
+              <div className="absolute -top-6 -left-6 w-12 h-12 border-t-2 border-l-2 border-primary-container opacity-40"></div>
+              <div className="absolute -bottom-6 -right-6 w-12 h-12 border-b-2 border-r-2 border-primary-container opacity-40"></div>
+              <div className="absolute top-1/2 -right-4 w-1 h-32 bg-primary-container/20 -translate-y-1/2 hidden lg:block"></div>
+              
+              <UploadFlow />
+            </div>
           </div>
 
         </div>
         
-        <footer className="py-8 text-center text-white/20 text-xs font-mono uppercase tracking-widest no-print mt-auto border-t border-white/5">
-          <p>© {new Date().getFullYear()} Vault Print Infrastructure. Decentralized Trust.</p>
+        <footer className="py-12 flex flex-col md:flex-row justify-between items-center text-label-sm no-print mt-auto border-t border-outline-variant gap-8">
+          <div className="flex gap-12">
+            <p>© {new Date().getFullYear()} Vault Print Infrastructure</p>
+            <p className="hidden md:block">ISO-27001 Compliant Strategy</p>
+          </div>
+          <div className="flex items-center gap-6">
+            <span className="opacity-40 uppercase tracking-widest font-mono">STATUS: SOVEREIGN CANNONICAL</span>
+            <div className="w-2 h-2 rounded-full bg-secondary-container"></div>
+          </div>
         </footer>
       </div>
     </main>
