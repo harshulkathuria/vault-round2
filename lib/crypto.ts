@@ -38,7 +38,21 @@ export async function decryptFile(encryptedBuffer: ArrayBuffer, key: CryptoKey, 
     encryptedBuffer as any
   );
 
-  return new Blob([decryptedContent]);
+  // Detect basic mime types from magic bytes
+  const bytes = new Uint8Array(decryptedContent);
+  let type = "application/octet-stream";
+  
+  if (bytes.length >= 4) {
+    if (bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46) {
+      type = "application/pdf";
+    } else if (bytes[0] === 0xff && bytes[1] === 0xd8) {
+      type = "image/jpeg";
+    } else if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
+      type = "image/png";
+    }
+  }
+
+  return new Blob([decryptedContent], { type });
 }
 
 export async function exportKey(key: CryptoKey): Promise<string> {
