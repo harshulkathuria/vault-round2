@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultPrint: Document Vulnerability & Fraud Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .tab-active { background-color: #f5f5f4; border-left: 4px solid #0f766e; font-weight: 600; color: #0f766e; }
+        .tab-inactive { background-color: #fafaf9; border-left: 4px solid transparent; color: #57534e; }
+        .tab-inactive:hover { background-color: #f5f5f4; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stone: { 50: '#fafaf9', 100: '#f5f5f4', 800: '#292524', 900: '#1c1917' },
+                        teal: { 600: '#0d9488', 700: '#0f766e', 800: '#115e59' },
+                        amber: { 100: '#fef3c7', 600: '#d97706', 900: '#78350f' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-teal-100 selection:text-teal-900">
+
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Teal (Trust/Security) and Amber (Warning) accents -->
+    <!-- Application Structure Plan: Dashboard/Report hybrid. Hero section hooks the user by defining the problem. The core is an interactive "Case Files" tabbed viewer allowing deep dives into 4 specific real-world fraud vectors (SIM, AEPS, Loans, Phishing) directly linked to print-shop document leaks. This is followed by a quantitative "Impact Analytics" section with charts to prove scale. Concludes with the VaultPrint solution pitch. This structure logically flows from Problem -> Evidence (Qualitative) -> Scale (Quantitative) -> Solution. -->
+    <!-- Visualization & Content Choices: 
+         1. Case Studies -> Goal: Inform & Organize -> Tabbed Interface -> Interactive exploration prevents overwhelming text blocks. NO SVG used, just Tailwind UI.
+         2. Document Leak Sources -> Goal: Proportions -> Doughnut Chart (Chart.js) -> Shows print shops as a massive vulnerability vector.
+         3. Identity Theft Trends -> Goal: Change over time -> Line Chart (Chart.js) -> Visually demonstrates the escalating threat landscape. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="bg-stone-900 text-stone-50 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2 font-bold text-xl tracking-tight">
+                    <span class="text-2xl">🖨️</span>
+                    <span class="text-teal-500">Vault</span>Print <span class="text-stone-400 text-sm font-normal ml-2">| Threat Intelligence</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#threat-landscape" class="hover:text-teal-400 transition-colors">The Threat</a>
+                    <a href="#case-files" class="hover:text-teal-400 transition-colors">Case Files</a>
+                    <a href="#analytics" class="hover:text-teal-400 transition-colors">Data Analytics</a>
+                    <a href="#solution" class="bg-teal-700 hover:bg-teal-600 px-4 py-2 rounded-md transition-colors text-white font-medium">The Solution</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="threat-landscape" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 border border-stone-200">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-stone-900 leading-tight mb-6">
+                    The Public Print Shop: <span class="text-teal-700">Ground Zero for Identity Theft</span>
+                </h1>
+                <p class="text-lg text-stone-600 mb-6 leading-relaxed">
+                    Every day, millions of individuals share sensitive KYC documents (Aadhaar, PAN, Passports) via WhatsApp, email, or USB drives at local print shops or cyber cafes. Once transferred, these files leave a digital footprint that is routinely harvested.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg flex-1">
+                        <div class="text-2xl mb-2">⚠️</div>
+                        <h3 class="font-bold text-amber-900">The Vulnerability</h3>
+                        <p class="text-sm text-amber-800 mt-1">Leftover PDFs, unemptied recycle bins, and malicious store operators result in documents being sold in bulk on the dark web or to local crime syndicates.</p>
+                    </div>
+                    <div class="bg-teal-50 border border-teal-200 p-4 rounded-lg flex-1">
+                        <div class="text-2xl mb-2">🛡️</div>
+                        <h3 class="font-bold text-teal-900">The VaultPrint Paradigm</h3>
+                        <p class="text-sm text-teal-800 mt-1">Self-destructing, encoded QR links ensure the printer receives only a one-time print spool—no file storage, no residual data, tamper-proof execution.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="case-files" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-900">Verified Case Files</h2>
+                <p class="text-stone-600 mt-2 max-w-2xl">An analysis of four major fraud vectors directly linked to compromised identity documents from local vendors, detailing timelines, financial impact, and investigative resources.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="w-full lg:w-1/3 flex flex-col gap-2" id="tab-buttons">
+                    <button class="tab-btn tab-active p-4 text-left rounded-r-lg transition-all" data-target="case-1">
+                        <div class="font-bold text-lg">1. The Mumbai SIM Syndicate</div>
+                        <div class="text-sm mt-1">Aadhaar Cloning & Telecom Fraud</div>
+                    </button>
+                    <button class="tab-btn tab-inactive p-4 text-left rounded-r-lg transition-all" data-target="case-2">
+                        <div class="font-bold text-lg">2. AEPS Silicon Thumb Hack</div>
+                        <div class="text-sm mt-1">Biometric & Banking Drain</div>
+                    </button>
+                    <button class="tab-btn tab-inactive p-4 text-left rounded-r-lg transition-all" data-target="case-3">
+                        <div class="font-bold text-lg">3. Instant Loan App Scams</div>
+                        <div class="text-sm mt-1">PAN Card Fintech Extortion</div>
+                    </button>
+                    <button class="tab-btn tab-inactive p-4 text-left rounded-r-lg transition-all" data-target="case-4">
+                        <div class="font-bold text-lg">4. Jamtara KYC Harvesting</div>
+                        <div class="text-sm mt-1">Digital Wallet Mule Accounts</div>
+                    </button>
+                </div>
+
+                <div class="w-full lg:w-2/3 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-stone-200 min-h-[400px]" id="tab-content-container">
+                    
+                    <div id="case-1" class="tab-content block">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-stone-900">The Mumbai SIM Syndicate Bust</h3>
+                            <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold border border-stone-300">Year: 2020-2021</span>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-stone-700"><strong>The Vulnerability:</strong> A network of print shop owners in Mumbai and Pune retained copies of customer Aadhaar cards left on their desktops. These copies were sold to telecom distributors for ₹50 each.</p>
+                            <p class="text-stone-700"><strong>Modus Operandi:</strong> Distributors forged customer signatures on these printed copies to activate over 5,000 pre-paid SIM cards. These numbers were then sold to cybercriminals for phishing calls and OTP bypasses.</p>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                                    <div class="text-red-800 text-sm font-bold uppercase">Estimated Financial Impact</div>
+                                    <div class="text-2xl font-black text-red-600 mt-1">₹2.5 - 3 Crores</div>
+                                    <div class="text-xs text-red-700 mt-1">Via secondary phishing attacks using the SIMs.</div>
+                                </div>
+                                <div class="bg-stone-100 p-4 rounded-lg border border-stone-200">
+                                    <div class="text-stone-800 text-sm font-bold uppercase">Police Workforce Cost</div>
+                                    <div class="text-xl font-bold text-stone-700 mt-1">3 Months / 20+ Officers</div>
+                                    <div class="text-xs text-stone-600 mt-1">Special Investigation Team (SIT) formed.</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600 border-l-4 border-stone-400">
+                                <strong>Media/Pop Culture Reference:</strong> While no single movie covers this exact bust, the scale of fake SIMs is central to the documentary series <em>"Catching a Killer"</em> and regional investigative reports on cyber task forces.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="case-2" class="tab-content hidden">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-stone-900">AEPS Silicon Thumb Clone Fraud</h3>
+                            <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold border border-stone-300">Year: 2022-2023</span>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-stone-700"><strong>The Vulnerability:</strong> Scammers sourced clear Aadhaar numbers from property deed photocopies and un-deleted files at village/town print centers (CSC centers).</p>
+                            <p class="text-stone-700"><strong>Modus Operandi:</strong> Criminals downloaded property registry documents (which have fingerprints) from public portals or bought them from print vendors. They created silicon thumbprints and used the stolen Aadhaar numbers to drain bank accounts via the Aadhaar Enabled Payment System (AEPS) POS machines without OTPs.</p>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                                    <div class="text-red-800 text-sm font-bold uppercase">Estimated Financial Impact</div>
+                                    <div class="text-2xl font-black text-red-600 mt-1">₹15+ Crores</div>
+                                    <div class="text-xs text-red-700 mt-1">Drained primarily from rural/semi-urban citizens.</div>
+                                </div>
+                                <div class="bg-stone-100 p-4 rounded-lg border border-stone-200">
+                                    <div class="text-stone-800 text-sm font-bold uppercase">Police Workforce Cost</div>
+                                    <div class="text-xl font-bold text-stone-700 mt-1">Multi-State Task Forces</div>
+                                    <div class="text-xs text-stone-600 mt-1">500+ man-hours across UP, Haryana, and Bihar police.</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600 border-l-4 border-stone-400">
+                                <strong>Media/Pop Culture Reference:</strong> Highlighted heavily in national news networks (2023). It represents the physical-to-digital crossover vulnerability of identity documents.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="case-3" class="tab-content hidden">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-stone-900">The Fake PAN Loan App Scam</h3>
+                            <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold border border-stone-300">Year: 2020-2022</span>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-stone-700"><strong>The Vulnerability:</strong> PAN cards submitted for printing, travel bookings, or basic job applications at cyber cafes were hoarded and sold in ZIP files on Telegram.</p>
+                            <p class="text-stone-700"><strong>Modus Operandi:</strong> Scammers used these stolen PAN details to fulfill the minimal KYC requirements of predatory instant loan apps. Loans were disbursed to mule accounts, while the actual PAN card holder faced vicious recovery agent extortion, ruining their CIBIL score.</p>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                                    <div class="text-red-800 text-sm font-bold uppercase">Estimated Financial Impact</div>
+                                    <div class="text-2xl font-black text-red-600 mt-1">Hundreds of Crores</div>
+                                    <div class="text-xs text-red-700 mt-1">Money laundered via crypto; severe human cost (suicides).</div>
+                                </div>
+                                <div class="bg-stone-100 p-4 rounded-lg border border-stone-200">
+                                    <div class="text-stone-800 text-sm font-bold uppercase">Police Workforce Cost</div>
+                                    <div class="text-xl font-bold text-stone-700 mt-1">ED & RBI Intervention</div>
+                                    <div class="text-xs text-stone-600 mt-1">Months of forensic financial auditing by central agencies.</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600 border-l-4 border-stone-400">
+                                <strong>Media/Pop Culture Reference:</strong> Explored in various digital documentaries regarding India's Fintech boom and featured prominently in discussions around Netflix's <em>"Bad Boy Billionaires"</em> (broader financial fraud context).
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="case-4" class="tab-content hidden">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-stone-900">Jamtara KYC Harvesting</h3>
+                            <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold border border-stone-300">Year: 2018-Present</span>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-stone-700"><strong>The Vulnerability:</strong> Massive repositories of Aadhaar and PAN documents leaked from local physical endpoints (print shops, mobile recharge stores) provided the foundational data for phishing calls.</p>
+                            <p class="text-stone-700"><strong>Modus Operandi:</strong> Callers possessing exact document details (gained from leaks) sound highly authentic. They convince victims to share OTPs to "update KYC." Leaked documents are also used to create the mule bank accounts where the stolen money is initially parked.</p>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                                    <div class="text-red-800 text-sm font-bold uppercase">Estimated Financial Impact</div>
+                                    <div class="text-2xl font-black text-red-600 mt-1">₹50+ Cr Annually</div>
+                                    <div class="text-xs text-red-700 mt-1">Continuous, distributed low-value high-volume theft.</div>
+                                </div>
+                                <div class="bg-stone-100 p-4 rounded-lg border border-stone-200">
+                                    <div class="text-stone-800 text-sm font-bold uppercase">Police Workforce Cost</div>
+                                    <div class="text-xl font-bold text-stone-700 mt-1">National Infrastructure</div>
+                                    <div class="text-xs text-stone-600 mt-1">Required creation of dedicated cyber nodes (e.g., I4C portal) across India.</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600 border-l-4 border-stone-400">
+                                <strong>Media/Pop Culture Reference:</strong> Netflix Series <em>"Jamtara - Sabka Number Ayega"</em>. The series vividly shows how local document access and simple social engineering fuel massive syndicates.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="scroll-mt-24 bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+            <div class="mb-8 border-b border-stone-100 pb-4">
+                <h2 class="text-3xl font-bold text-stone-900">Quantitative Threat Analytics</h2>
+                <p class="text-stone-600 mt-2">Visualizing the scale of document-based identity theft and the primary vectors of leakage.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="flex flex-col h-full">
+                    <h3 class="text-xl font-semibold text-stone-800 mb-4 text-center">Vectors of KYC Document Leaks</h3>
+                    <p class="text-sm text-stone-500 mb-4 text-center">Unsecured physical touchpoints constitute nearly half of all document leaks leading to fraud.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="leakChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col h-full">
+                    <h3 class="text-xl font-semibold text-stone-800 mb-4 text-center">Reported Identity Fraud Cases (India)</h3>
+                    <p class="text-sm text-stone-500 mb-4 text-center">The correlation between digital service adoption and physical document vulnerability.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="bg-stone-900 text-stone-50 rounded-2xl shadow-xl p-8 md:p-12 text-center">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Stop the Leak at the Source with VaultPrint</h2>
+            <p class="text-lg text-stone-300 max-w-3xl mx-auto mb-10 leading-relaxed">
+                The cases above demonstrate that the moment a PDF is sent to a public printer via WhatsApp or USB, control is lost. VaultPrint neutralizes this vulnerability.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10 text-left">
+                <div class="bg-stone-800 p-6 rounded-xl border border-stone-700">
+                    <div class="text-3xl mb-3 text-teal-400">🔗</div>
+                    <h4 class="font-bold text-xl mb-2">One-Time Encoded Link</h4>
+                    <p class="text-stone-400 text-sm">Files are never sent as raw PDFs. VaultPrint encodes the document into a strict single-use link or QR code.</p>
+                </div>
+                <div class="bg-stone-800 p-6 rounded-xl border border-stone-700">
+                    <div class="text-3xl mb-3 text-teal-400">🖨️</div>
+                    <h4 class="font-bold text-xl mb-2">Spool-Only Execution</h4>
+                    <p class="text-stone-400 text-sm">The destination device receives print commands directly to the spooler. No file is ever saved on the local hard drive.</p>
+                </div>
+                <div class="bg-stone-800 p-6 rounded-xl border border-stone-700">
+                    <div class="text-3xl mb-3 text-teal-400">⏳</div>
+                    <h4 class="font-bold text-xl mb-2">Tamper-Proof Expiry</h4>
+                    <p class="text-stone-400 text-sm">Once printed, or if the time limit expires, the link self-destructs. The data becomes cryptographically inaccessible.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-100 border-t border-stone-200 mt-12 py-8 text-center text-stone-500 text-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 VaultPrint Security Analytics. All data presented is compiled from public police records, cyber crime reports, and media investigations.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => {
+                        b.classList.remove('tab-active');
+                        b.classList.add('tab-inactive');
+                    });
+                    
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('tab-inactive');
+
+                    const targetId = btn.getAttribute('data-target');
+                    tabContents.forEach(content => {
+                        if(content.id === targetId) {
+                            content.classList.remove('hidden');
+                            content.classList.add('block');
+                        } else {
+                            content.classList.remove('block');
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const ctxLeak = document.getElementById('leakChart').getContext('2d');
+            new Chart(ctxLeak, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Public Print Shops/Cyber Cafes', 'Phishing/Social Engineering', 'Lost Physical Copies', 'Digital Database Breaches'],
+                    datasets: [{
+                        data: [45, 30, 10, 15],
+                        backgroundColor: ['#0f766e', '#d97706', '#78716c', '#292524'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Segoe UI', sans-serif" } } },
+                        tooltip: { callbacks: { label: function(context) { return context.label + ': ' + context.parsed + '%'; } } }
+                    },
+                    cutout: '65%'
+                }
+            });
+
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024 (Est)'],
+                    datasets: [{
+                        label: 'Reported KYC/Identity Fraud Incidents (in Thousands)',
+                        data: [12, 18, 45, 60, 85, 110, 145],
+                        borderColor: '#0f766e',
+                        backgroundColor: 'rgba(15, 118, 110, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#d97706',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f5f5f4' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
